@@ -24,7 +24,7 @@ class WiderFaceValSet(object):
     __inject__ = ['generate_anchors_fn', 'preprocess_fn']
     def __init__(self, 
                  phase='test',
-                 base_data_path = './dataset',
+                 base_data_path = '/content/drive/MyDrive', # changed previous value was './dataset'
                  img_info_mat_path='WIDERFACE/wider_face_split/wider_face_val.mat',
                  img_dir_name='WIDERFACE/WIDER_val/images',
                  generate_anchors_fn=None, 
@@ -94,7 +94,7 @@ class WiderFaceTrainSet(object):
     def __init__(self,
                 phase='training',
                 debug_img_dir='./debug_img_dir',
-                base_data_path = './dataset',
+                base_data_path = '/content/drive/MyDrive', # changed previous value was './dataset'
                 gt_file='WIDERFACE/wider_face_split/wider_face_train_bbx_gt.txt',
                 img_dir_name='WIDERFACE/WIDER_train/images',
                 generate_anchors_fn=None,

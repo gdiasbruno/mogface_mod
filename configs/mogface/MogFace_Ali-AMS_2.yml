@@ -1,36 +1,35 @@
-root_path: ../../
-project_name: wider_face_base_model
 seed: 0
-max_iterations: 140000
+max_iterations: 5000
 log_smooth_window: 10
 snapshot_iter: 5000
-eval_iter_list: [90000, 140000]
+eval_iter_list: [5000]
 
 architecture: WiderFaceBaseNet
-pretrain_weights: /content/drive/MyDrive/MogFace/pretrain_weights/resnet50-19c8e357.pth # changed
+out_bbox_anchor: True
+use_ali_ams: True
+pretrain_weights: ./pretrain_weights/model_70000.pth
 weight_init_fn: NormalWeightInit
 num_classes: 1
-clip_gradients: ClipGradients
 
 optimizer: SGDOptimizer
 warmup_strategy: LinearWarmup
-lr: 0.01
+lr: 0.004
 
 criterion: MogCriterion
-criterion_dsfd: Criterion
 
 train_feed: TrainFeed
 validation_set: WiderFaceValSet
 generate_anchors_fn: GeneartePriorBoxes
 preprocess_fn: BasePreprocess
+collate_fn: BBoxAnchorTrainCollate
 
 WiderFaceBaseNet:
   backbone: ResNet
   fpn: LFPN
-  pred_net: MogPredNet
+  pred_net: RetinaPredNet
 
 ResNet:
-  depth: 101
+  depth: 50
 
 LFPN:
   c2_out_ch: 256
@@ -41,19 +40,13 @@ LFPN:
   c6_out_ch: 512
   c7_mid_ch: 128
   c7_out_ch: 256
-  out_dsfd_ft: True
 
-MogPredNet:
+RetinaPredNet:
   num_anchor_per_pixel: 1
   input_ch_list: [256, 256, 256, 256, 256, 256]
-  use_deep_head: True
-  deep_head_with_gn: True 
-  deep_head_ch: 512
-  use_ssh: True
-  use_dsfd: True
   retina_cls_weight_init_fn: RetinaClsWeightInit
 
-Criterion:
+MogCriterion:
   cls_loss_weight: 1
   loc_loss_weight: 2
   cls_loss_fn: FocalLoss
@@ -68,12 +61,10 @@ SmoothL1Loss:
 
 TrainFeed:
   dataset: WiderFaceTrainSet
-  add_dsfd_label: True
 
 WiderFaceTrainSet:
   anchor_target_fn: AnchorTarget
   data_aug_settings: DataAugSettings
-  out_dsfd_label: True
 
 
 BasePreprocess:
@@ -83,12 +74,6 @@ BasePreprocess:
   img_mean: [0.485, 0.456, 0.406]
   img_std: [0.229, 0.224, 0.225]
 
-MogCriterion:
-  cls_loss_weight: 1
-  loc_loss_weight: 2
-  cls_loss_fn: FocalLoss
-  loc_loss_fn: SmoothL1Loss
-
 AnchorTarget:
   rpn_positive_overlap: 0.35
   rpn_negative_overlap: 0.35
@@ -96,7 +81,7 @@ AnchorTarget:
   nomalized_compute_overlap: False
 
 GeneartePriorBoxes:
-  scale_list: [0.68]
+  scale_list: [1]
   aspect_ratio_list: [1.0]
   stride_list: [4,8,16,32,64,128]
   anchor_size_list: [16,32,64,128,256,512]
@@ -108,10 +93,6 @@ SGDOptimizer:
 LinearWarmup:
   #lr: 0.001
   warm_up_iter: 3000 
-  step_list: [110000, 140000, 160000]
+  step_list: [50000, 70000, 160000]
   ini_lr: 1e-6
   gamma: 0.1
-
-ClipGradients:
-  max_norm: 5
-  norm_type: 2

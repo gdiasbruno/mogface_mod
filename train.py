@@ -90,6 +90,8 @@ if __name__ == '__main__':
     cudnn.benchmark = True
     parallel_net = parallel_net.cuda()
 
+    print("cfg: ", cfg)
+
     # reusume
     start_iter = 0
     if args.resume_iter is not None:
@@ -100,7 +102,8 @@ if __name__ == '__main__':
         print ('Finish load model.')
     # load pretrain_weights
     elif 'pretrain_weights' in cfg:
-        net.backbone.load_weights(cfg.pretrain_weights)
+        print("pretrained weights: ", cfg.pretrain_weights)
+        net.load_state_dict(torch.load(cfg.pretrain_weights))
 
     # optimizer
     use_warmup = 'warmup_strategy' in cfg
@@ -125,6 +128,17 @@ if __name__ == '__main__':
     if use_hcam:
         criterion_1 = create(cfg.criterion_1)
     # train_model
+
+    # freeze weights
+    for param in net.parameters():
+      param.requires_grad = False
+    # unfreeze weights from pred net
+    for param in net.pred_net.pred_loc.parameters():
+            param.requires_grad = True
+      
+    for param in net.parameters():
+      print("param: ", param.requires_grad)
+
     net.train()
     for iter_idx in range(start_iter, cfg.max_iterations + 1):
         t1 = time.time()

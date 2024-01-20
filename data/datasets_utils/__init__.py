@@ -7,4 +7,8 @@
 # ******************************************************
 from __future__ import absolute_import
 from . import widerface
+from . import malf
+from . import malf_val
 from .widerface import *
+from .malf import *
+from .malf_val import *

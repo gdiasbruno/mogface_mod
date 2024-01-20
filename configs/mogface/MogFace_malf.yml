@@ -1,13 +1,14 @@
 root_path: ../../
 project_name: wider_face_base_model
 seed: 0
-max_iterations: 140000
+max_iterations: 8501
 log_smooth_window: 10
-snapshot_iter: 5000
-eval_iter_list: [90000, 140000]
+snapshot_iter: 8500
+eval_iter_list: [60000]
+finetune: True # created
 
 architecture: WiderFaceBaseNet
-pretrain_weights: /content/drive/MyDrive/MogFace/pretrain_weights/resnet50-19c8e357.pth # changed
+pretrain_weights: /content/drive/MyDrive/MogFace/pretrain_weights/resnet50-19c8e357.pth
 weight_init_fn: NormalWeightInit
 num_classes: 1
 clip_gradients: ClipGradients
@@ -19,8 +20,9 @@ lr: 0.01
 criterion: MogCriterion
 criterion_dsfd: Criterion
 
-train_feed: TrainFeed
-validation_set: WiderFaceValSet
+train_feed: TrainFeedMALF
+train_feed_val: TrainFeedMALF_val
+validation_set: MALFValSet
 generate_anchors_fn: GeneartePriorBoxes
 preprocess_fn: BasePreprocess
 
@@ -66,11 +68,20 @@ FocalLoss:
 SmoothL1Loss:
   sigma: 3
 
-TrainFeed:
-  dataset: WiderFaceTrainSet
+TrainFeedMALF:
+  dataset: MALFTrainSet
   add_dsfd_label: True
 
-WiderFaceTrainSet:
+TrainFeedMALF_val:
+  dataset: MALFTrainSet_val
+  add_dsfd_label: True
+
+MALFTrainSet:
+  anchor_target_fn: AnchorTarget
+  data_aug_settings: DataAugSettings
+  out_dsfd_label: True
+
+MALFTrainSet_val:
   anchor_target_fn: AnchorTarget
   data_aug_settings: DataAugSettings
   out_dsfd_label: True
