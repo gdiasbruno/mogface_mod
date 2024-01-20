@@ -24,7 +24,7 @@ class MALFValSet(object):
     __inject__ = ['generate_anchors_fn', 'preprocess_fn']
     def __init__(self, 
                  phase='test',
-                 base_data_path = '/content/base',
+                 base_data_path = './base',
                  img_info_pic_filenames_path='val_pics_filenames.txt',
                  img_dir_name='all_pics',
                  generate_anchors_fn=None, 
@@ -84,9 +84,9 @@ class MALFTrainSet(object):
                   'data_aug_settings']
     def __init__(self,
                 phase='training',
-                debug_img_dir='/content/base/debug_img_dir',
-                base_data_path = '/content/base',
-                gt_file='finetune_train_file_0_1_3_4.txt',
+                debug_img_dir='./base/debug_img_dir',
+                base_data_path = './base',
+                gt_file='',
                 img_dir_name='all_pics',
                 generate_anchors_fn=None,
                 anchor_target_fn=None,

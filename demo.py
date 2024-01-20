@@ -226,7 +226,7 @@ if __name__ == "__main__":
             t2 = time.time()
             print("Inference time : %d" % ((t2 - t1) * 1000))
             print("boxes: ", boxes[0], len(boxes))
-            img = draw_bboxes(img_show, boxes[:, :4], output_dir='/content')
+            img = draw_bboxes(img_show, boxes[:, :4], output_dir='./')
             cv2.imwrite("Demo", img)
             cv2.imshow("Demo", img)
             cv2.waitKey(0)

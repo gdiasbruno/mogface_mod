@@ -108,6 +108,6 @@ if __name__ == '__main__':
     os.system('rm -rf tmp_img/*')
     for i in range(random_sample_arr.shape[0]):
         img, bbox_labels = detection.pull_item(random_sample_arr[i])
-        draw_bboxes(np.array(img).transpose([1,2,0]), np.array(bbox_labels)[:, :4], output_dir='/content/drive/MyDrive')
+        draw_bboxes(np.array(img).transpose([1,2,0]), np.array(bbox_labels)[:, :4], output_dir='./')
 
 

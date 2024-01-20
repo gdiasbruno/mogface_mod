@@ -84,9 +84,9 @@ class MALFTrainSet_val(object):
                   'data_aug_settings']
     def __init__(self,
                 phase='training',
-                debug_img_dir='/content/base/debug_img_dir',
-                base_data_path = '/content/base',
-                gt_file='finetune_validation_file_2.txt',
+                debug_img_dir='./base/debug_img_dir',
+                base_data_path = './base',
+                gt_file='',
                 img_dir_name='all_pics',
                 generate_anchors_fn=None,
                 anchor_target_fn=None,
