@@ -1,11 +1,13 @@
 root_path: ../../
 project_name: wider_face_base_model
 seed: 0
-max_iterations: 8501
-log_smooth_window: 10
-snapshot_iter: 8500
+max_iterations: 50000
+log_smooth_window: 1
+snapshot_iter: 10000
 eval_iter_list: [60000]
 finetune: True # created
+max_epochs: 100
+snapshot_epoch: 50
 
 architecture: WiderFaceBaseNet
 pretrain_weights: ./pretrain_weights/resnet50-19c8e357.pth

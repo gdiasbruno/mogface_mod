@@ -30,7 +30,7 @@ cv2.setNumThreads(0)
 
 parser = argparse.ArgumentParser(description='Training Details')
 parser.add_argument('--batch_size', '-b', default=28, type=int, help='Batch size of all GPUs for training')
-parser.add_argument('--validation_epoch_gap', '-vig', default=63, type=int, help='Interval of epochs to do validation')
+parser.add_argument('--validation_iter_gap', '-vig', default=63, type=int, help='Iterations of epochs to do validation')
 parser.add_argument('--num_workers','-n', default=14, type=int, help='Number of workers used in dataloading')
 parser.add_argument('--sub_project_name', default=None, type=str, help='sub_project_name.')
 parser.add_argument('--logs_folder', default=None, type=str, help='folder to salve logs.')
@@ -193,7 +193,7 @@ if __name__ == '__main__':
                 bbox_labels_list  = [Variable(bbox_label.cuda()) for bbox_label in bbox_labels_list]
                 anchors = Variable(anchors.cuda())
 
-        if cur_epoch_num % args.validation_epoch_gap == 0:
+        if iter_idx % args.validation_iter_gap == 0:
             val_pics_completed = False
             data_loader_val = data.DataLoader(dataset_val, 10, num_workers=args.num_workers,
                                       shuffle=True, pin_memory=True)
@@ -253,13 +253,13 @@ if __name__ == '__main__':
             print('lr: {:.9f}'.format(optimizer.param_groups[0]['lr']))
             lines_for_logs.append('lr: {:.9f}'.format(optimizer.param_groups[0]['lr']))
 
-        if cur_epoch_num % cfg.snapshot_epoch == 0 and cur_epoch_num != 0:
+        if iter_idx % cfg.snapshot_iter == 0 and iter_idx != start_iter:
             if iter_idx == 0:
-                save_model_name = os.path.join(snapshots_dir, 'model_epoch_0000.pth')
+                save_model_name = os.path.join(snapshots_dir, 'model_0000.pth')
             else:
-                save_model_name = os.path.join(snapshots_dir, 'model_epoch_{}.pth'.format(cur_epoch_num))
-            print('Epoch: {}, Saving model in {}.' .format(cur_epoch_num, save_model_name))
-            lines_for_logs.append('Epoch: {}, Saving model in {}.' .format(cur_epoch_num, save_model_name))
+                save_model_name = os.path.join(snapshots_dir, 'model_{}.pth'.format(iter_idx))
+            print('Iter: {}, Saving model in {}.' .format(iter_idx, save_model_name))
+            lines_for_logs.append('Iter: {}, Saving model in {}.' .format(iter_idx, save_model_name))
 
 
             torch.save(net.state_dict(), save_model_name)
