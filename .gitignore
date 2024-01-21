@@ -19,3 +19,4 @@ logs/
 ./utils/nms/*.so
 ./utils/bbox/*.so
 
+base/all_pics
